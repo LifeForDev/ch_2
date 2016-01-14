@@ -56,8 +56,6 @@ class LeadsListDelete(DeleteView):
 
     def post(self, request, *args, **kwargs):
         self.leads_to_delete = self.request.POST.getlist('leadsToDelete')
-        print '-----------------+++++++++++'
-        print self.leads_to_delete
         if self.request.POST.get("confirm_delete"):
             queryset = self.get_queryset()
             queryset.delete()
@@ -66,31 +64,3 @@ class LeadsListDelete(DeleteView):
             return HttpResponseRedirect(self.success_url)
         else:
             return self.get(self, *args, **kwargs)
-
-# class SomeItemConfirmDeleteView(DeleteView):
-#     template_name = 'confirm_delete_someitems.html'
-#     model = SomeItem
-#     success_url = reverse_lazy('list_someitems_url')
-#     items_to_delete = []
-
-#     def get_queryset(self):
-#         queryset = super(ChargeParkConfirmDeleteView, self).get_queryset()
-#         self.queryset = queryset.filter(id__in=self.items_to_delete)
-#         return self.queryset
-
-#     def get_object(self, queryset=None):
-#         return self.get_queryset()
-
-#     def post(self, request, *args, **kwargs):
-#         self.items_to_delete = self.request.POST.getlist('itemsToDelete')
-#         if self.request.POST.get("confirm_delete"):
-#             # when confirmation page has been displayed and confirm button pressed
-#             queryset = self.get_queryset()
-#             queryset.delete() # deleting on the queryset is more efficient than on the model object
-#             return HttpResponseRedirect(self.success_url)
-#         elif self.request.POST.get("cancel"):
-#             # when confirmation page has been displayed and cancel button pressed
-#             return HttpResponseRedirect(self.success_url)
-#         else:
-#             # when data is coming from the form which lists all items
-#             return self.get(self, *args, **kwargs)
