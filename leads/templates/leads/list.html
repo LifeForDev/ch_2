@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{% url 'leads-list' %}">Home</a>
+                        </li>
+                        <li class="active">Tour Leads</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="{% url 'lead-add' %}" class="btn btn-primary"><i class="fa fa-plus fa-fw"></i>Add Lead</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table">
+                        <thead>
+                            <tr class="active">
+                                <th>Choose</th>
+                                <th>Operation</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Card Number</th>
+                                <th>Expire Date</th>
+                                <th>Professional</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lead in object_list %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="check-selected" data-id="{{ lead.pk }}" />
+                                </td>
+                                <td>
+                                    <a href="{% url 'lead-edit' lead.pk %}">Edit</a>|
+                                    <a href="{% url 'lead-delete' lead.pk %}" class="lead-delete" >Delete</a>
+                                </td>
+                                <td>
+                                    {% if lead.name %}
+                                        <a href="{% url 'lead-detail' lead.pk %}">{{ lead.name }}</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if lead.gender %}
+                                        {{ lead.gender.0 }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if lead.card_number %}
+                                        {{ lead.card_number }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if lead.expiry_date %}
+                                        {{ lead.expiry_date }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if lead.professional %}
+                                        {{ lead.professional.0 }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                                No leads.
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-3 ">
+                    <input type="checkbox" class="select-all">Select All
+                    <a class="btn btn-primary pull-right batch-delete"><i class="fa fa-remove
+                fa-fw "></i>Delete</a>
+                </div>
+                <div class="col-md-9 ">
+                    {% if is_paginated %}
+                    <ul class="pagination pull-right ">
+                        {% if page_obj.has_previous %}
+                            <li>
+                                <a href="{% url 'leads-list' %}?page={{ page_obj.previous_page_number }}">Prev</a>
+                            </li>
+                        {% endif %}
+                        {% for i in "x"|rjust:page_obj.paginator.num_pages %}
+                            <li {% if forloop.counter == page_obj.number %}class="active"{% endif %}>
+                                <a href="{% url 'leads-list' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li>
+                                <a href="{% url 'leads-list' %}?page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
