@@ -8,7 +8,7 @@
         <h3>The following objects as well as their related objects will be deleted. Are you sure?</h3>
         {% for item in object %}
             <input type="hidden" value="{{ item.id }}" name="leadsToDelete" />
-            <li><a href="{{ item.get_absolute_url }}">{{ item }}</a></li>
+            <li>{{ item }}</li>
         {% endfor %}
     </ul>
     <input type="submit" class="btn btn-primary" value="Confirm deletion" name="confirm_delete" />
