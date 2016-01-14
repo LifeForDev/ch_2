@@ -1,11 +1,12 @@
 from django.views.generic import CreateView, UpdateView, ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 
 from .models import Lead
-from .forms import LeadForm
+from .forms import LeadForm, LanguageFormSet
 
 
 class LeadsList(ListView):
@@ -18,7 +19,25 @@ class LeadAdd(CreateView):
     model = Lead
     form_class = LeadForm
     template_name = 'leads/create.html'
-    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super(LeadAdd, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = LanguageFormSet(self.request.POST)
+        else:
+            context['formset'] = LanguageFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return redirect(reverse('leads-list'))
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
 
 class LeadDetail(DetailView):
@@ -30,7 +49,25 @@ class LeadEdit(UpdateView):
     model = Lead
     template_name = 'leads/create.html'
     form_class = LeadForm
-    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+            context = super(LeadEdit, self).get_context_data(**kwargs)
+            if self.request.POST:
+                context['formset'] = LanguageFormSet(self.request.POST, instance=self.object)
+            else:
+                context['formset'] = LanguageFormSet(instance=self.object)
+            return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            print formset.save()
+            return redirect(reverse('leads-list'))
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
 
 class LeadDelete(DeleteView):

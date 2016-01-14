@@ -42,9 +42,9 @@ class Lead(models.Model):
             raise ValidationError('Check please Card number or Expiry Date')
 
 
-class Lenguage(models.Model):
+class Language(models.Model):
     name = models.CharField(max_length=128)
-    lead = models.ForeignKey('Lead')
+    lead = models.ForeignKey('Lead', related_name='languages')
 
     def __unicode__(self):
         return self.name

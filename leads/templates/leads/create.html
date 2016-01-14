@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block ext_js %}
+    <script type="text/javascript" src="{% static 'js/lead-form.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 
@@ -39,6 +44,23 @@
                             </div>
                         {% endfor %}
 
+
+                        <div class="form-group ">
+                            <div class="col-sm-2 ">
+                                <label for="languages " class="control-label ">Languages</label>
+                            </div>
+                            <div class="col-sm-10">
+                                <div id="languages">
+                                    {{ formset.management_form }}
+                                    {% for langForm in formset %}
+                                        <div class="formset-languages" data-id="{{ forloop.counter0 }}">
+                                            {{ langForm }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
                          <div class="form-group ">
                             <div class="col-sm-offset-2 col-sm-10 ">
                                 <button type="submit" class="btn btn-default ">
@@ -58,6 +80,12 @@
                     <hr>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="formset-template" style="display: none;">
+        <div class="formset-languages" data-id="__prefix__">
+            {{ formset.empty_form }}
         </div>
     </div>
 
