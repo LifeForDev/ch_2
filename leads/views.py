@@ -35,9 +35,8 @@ class LeadEdit(UpdateView):
 
 class LeadDelete(DeleteView):
     model = Lead
-    # template_name = 'leads/confirm_delete_leads.html'
+    template_name = 'leads/confirm_delete_leads.html'
     success_url = reverse_lazy('leads-list')
-    # leads_to_delete = []
 
 
 class LeadsListDelete(DeleteView):
@@ -56,6 +55,8 @@ class LeadsListDelete(DeleteView):
 
     def post(self, request, *args, **kwargs):
         self.leads_to_delete = self.request.POST.getlist('leadsToDelete')
+        if not self.leads_to_delete:
+            return HttpResponseRedirect(self.success_url)
         if self.request.POST.get("confirm_delete"):
             queryset = self.get_queryset()
             queryset.delete()
