@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="POST">
+    {% csrf_token %}
+
+    <ul>
+        {% for item in object %}
+            <input type="hidden" value="{{ item.id }}" name="leadsToDelete" />
+            <li><a href="{{ item.get_absolute_url }}">{{ item }}</a></li>
+        {% endfor %}
+    </ul>
+    <input type="submit" class="btn btn-primary" value="Confirm deletion" name="confirm_delete" />
+    <input type="submit" class="btn btn-primary" value="Cancel" name="cancel"/>
+</form>
+{% endblock %}

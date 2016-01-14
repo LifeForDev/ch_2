@@ -20,6 +20,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
+                    <form method="POST" action="{% url 'leads-delete' %}">
+                    {% csrf_token %}
                     <table class="table">
                         <thead>
                             <tr class="active">
@@ -36,7 +38,7 @@
                             {% for lead in object_list %}
                             <tr>
                                 <td>
-                                    <input type="checkbox" class="check-selected" data-id="{{ lead.pk }}" />
+                                    <input type="checkbox" class="check-selected" name="leadsToDelete" value="{{ lead.pk }}" />
                                 </td>
                                 <td>
                                     <a href="{% url 'lead-edit' lead.pk %}">Edit</a>|
@@ -78,9 +80,10 @@
             <div class="row ">
                 <div class="col-md-3 ">
                     <input type="checkbox" class="select-all">Select All
-                    <a class="btn btn-primary pull-right batch-delete"><i class="fa fa-remove
-                fa-fw "></i>Delete</a>
+                    <button class="btn btn-primary pull-right batch-delete"><i class="fa fa-remove
+                fa-fw "></i>Delete</button>
                 </div>
+                </form>
                 <div class="col-md-9 ">
                     {% if is_paginated %}
                     <ul class="pagination pull-right ">
